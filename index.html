@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aushadhi Kunj Harbal - Local Sandbox Store</title>
+    <!-- FontAwesome icons for a clean professional UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e5631; /* Deep Herbal Green */
+            --accent: #4c9a2a; /* Light Natural Green */
+            --text-main: #2b2b2b;
+            --text-light: #666666;
+            --bg-light: #f7f9f6;
+            --star-color: #ffb400;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #fff; color: var(--text-main); }
+
+        /* Announcement Bar */
+        .announcement-bar {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Navbar Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-links { display: flex; gap: 20px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--accent); }
+        .cart-trigger {
+            background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main);
+            position: relative; display: flex; align-items: center; gap: 8px;
+        }
+        .cart-badge {
+            background: var(--accent); color: white; border-radius: 50%; padding: 2px 6px;
+            font-size: 0.75rem; font-weight: bold; position: absolute; top: -8px; right: -12px;
+        }
+
+        /* Hero Banner Section */
+        .hero {
+            background: linear-gradient(135px, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 50px 20px; text-align: center; border-bottom: 4px solid var(--primary);
+        }
+        .hero h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 10px; }
+        .hero p { color: var(--text-light); font-size: 1.1rem; }
+
+        /* Trust Grid Badges */
+        .trust-badges {
+            max-width: 1200px; margin: 30px auto; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 0 20px;
+        }
+        .badge-item {
+            display: flex; align-items: center; gap: 10px; padding: 15px;
+            background: var(--bg-light); border-radius: 8px; border: 1px dashed #c8e6c9;
+        }
+        .badge-item i { color: var(--accent); font-size: 1.5rem; }
+        .badge-item span { font-size: 0.85rem; font-weight: 600; color: var(--primary); }
+
+        /* Product Gallery Area */
+        .main-container { max-width: 1200px; margin: 0 auto 60px; padding: 0 20px; }
+        .section-title { font-size: 1.8rem; border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 30px; color: var(--primary); }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 30px; }
+        .product-card {
+            background: white; border: 1px solid #eef2ed; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+        
+        .best-seller-tag {
+            position: absolute; top: 12px; left: 12px; background: #e53935; color: white;
+            font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; z-index: 2;
+        }
+        .img-wrapper { width: 100%; height: 230px; background: #fafafa; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .product-card img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .stars { color: var(--star-color); font-size: 0.9rem; margin-bottom: 5px; }
+        .stars span { color: var(--text-light); font-size: 0.8rem; margin-left: 5px; }
+        .product-title { font-size: 1.05rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px; height: 44px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-desc { font-size: 0.85rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.4; }
+        .price-row { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 15px; }
+        
+        .add-btn {
+            background-color: var(--primary); color: white; border: none; padding: 12px;
+            width: 100%; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;
+        }
+        .add-btn:hover { background-color: var(--accent); }
+
+        /* Slide-out Shopping Cart Sidebar Drawer */
+        .cart-drawer {
+            position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
+            background: white; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 1000;
+            display: flex; flex-direction: column; transition: right 0.3s ease;
+        }
+        .cart-drawer.open { right: 0; }
+        .cart-header { padding: 20px; background: var(--bg-light); border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h3 { color: var(--primary); }
+        .close-cart { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-light); }
+        .cart-items-list { padding: 20px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+        .cart-footer { padding: 20px; border-top: 1px solid #eaeaea; background: #fff; }
+        .checkout-btn { background: var(--accent); color: white; border: none; width: 100%; padding: 14px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .checkout-btn:hover { background: var(--primary); }
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 999; display: none; }
+        .cart-overlay.open { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-bar">✨ EXTRA 10% OFF ON ONLINE PAYMENT | 100% NATURAL AYURVEDIC SOLUTIONS ✨</div>
+
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo"><i class="fa-solid fa-leaf"></i> Aushadhi Kunj Harbal</a>
+            <ul class="nav-links">
+                <li><a href="#">Pain Relief</a></li>
+                <li><a href="#">Skin Care</a></li>
+                <li><a href="#">Digestive Health</a></li>
+                <li><a href="#">Wellness</a></li>
+            </ul>
+            <button class="cart-trigger" onclick="toggleCart(true)">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Natural Care, Not Temporary Fixes</h1>
+        <p>Researched & Crafted by Experts | FDA & FSSAI Approved Ingredients</p>
+    </section>
+
+    <section class="trust-badges">
+        <div class="badge-item"><i class="fa-solid fa-circle-check"></i> <span>100% Ayurvedic Formula</span></div>
+        <div class="badge-item"><i class="fa-solid fa-shield-heart"></i> <span>Non Habit Forming</span></div>
+        <div class="badge-item"><i class="fa-solid fa-industry"></i> <span>Made in GMP Facilities</span></div>
+        <div class="badge-item"><i class="fa-solid fa-truck-fast"></i> <span>Delivery in 3,000+ Cities</span></div>
+    </section>
+
+    <main class="main-container">
+        <h2 class="section-title">Our Bestsellers</h2>
+        <div class="product-grid" id="product-catalog"></div>
+    </main>
+
+    <!-- Side Drawer Cart Elements -->
+    <div class="cart-overlay" id="overlay" onclick="toggleCart(false)"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart" onclick="toggleCart(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items-container">
+            <p style="color: var(--text-light); text-align: center; margin-top: 20px;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <button class="checkout-btn" onclick="processCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        let shoppingCart = [];
+
+        async function fetchProducts() {
+            try {
+                const res = await fetch('http://localhost:8000/api/inventory');
+                const products = await res.json();
+                const catalog = document.getElementById('product-catalog');
+                
+                catalog.innerHTML = products.map(p => `
+                    <div class="product-card">
+                        ${p.bestSeller ? '<div class="best-seller-tag">Best Seller</div>' : ''}
+                        <div class="img-wrapper">
+                            <img src="${p.img}" alt="${p.title}">
+                        </div>
+                        <div class="card-content">
+                            <div>
+                                <div class="stars">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    <span>${p.rating}</span>
+                                </div>
+                                <h3 class="product-title">${p.title}</h3>
+                                <p class="product-desc">${p.description}</p>
+                            </div>
+                            <div>
+                                <div class="price-row">Rs. ${p.price.toFixed(2)}</div>
+                                <button class="add-btn" onclick="addItemToCart(${p.id}, '${p.title}', ${p.price})">
+                                    <i class="fa-solid fa-cart-plus"></i> ADD TO CART
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('product-catalog').innerHTML = `<p style="color:red; grid-column:1/-1; text-align:center;">Make sure 'node app.js' is running in your terminal.</p>`;
+            }
+        }
+
+        function toggleCart(isOpen) {
+            document.getElementById('cart-drawer').classList.toggle('open', isOpen);
+            document.getElementById('overlay').classList.toggle('open', isOpen);
+        }
+
+        function addItemToCart(id, title, price) {
+            shoppingCart.push({ id, title, price });
+            updateCartUI();
+            toggleCart(true); // Automatically open drawer when item is added
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = shoppingCart.length;
+            const container = document.getElementById('cart-items-container');
+            
+            if(shoppingCart.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-light); text-align: center; margin-top: 20px;">Your cart is empty.</p>`;
+                return;
+            }
+
+            container.innerHTML = shoppingCart.map((item, index) => `
+                <div class="cart-item">
+                    <div>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 2px;">${item.title}</h4>
+                        <span style="color: var(--primary); font-weight: 700; font-size: 0.85rem;">Rs. ${item.price.toFixed(2)}</span>
+                    </div>
+                    <button onclick="removeItem(${index})" style="background:none; border:none; color: #cc0000; cursor:pointer;"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function removeItem(idx) {
+            shoppingCart.splice(idx, 1);
+            updateCartUI();
+        }
+
+        async function processCheckout() {
+            if (shoppingCart.length === 0) return alert("Your cart is empty!");
+            
+            const res = await fetch('http://localhost:8000/api/checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: shoppingCart })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(`Order Processed Successfully!\nTracking Code: ${data.trackingId}\nCheck your Ubuntu terminal window logs to view full tracking properties.`);
+                shoppingCart = [];
+                updateCartUI();
+                toggleCart(false);
+            }
+        }
+
+        fetchProducts();
+    </script>
+</body>
+</html>
