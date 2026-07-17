@@ -327,8 +327,24 @@
                 <p class="text-brand-charcoal/80 text-sm max-w-lg mx-auto">Click any product card to see its active Ayurvedic profile. Add to your basket below.</p>
             </div>
 
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+                <button onclick="filterCatalog('all')" class="catalog-filter-btn active bg-brand-forest text-brand-cream text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all">
+                    All Powders
+                </button>
+                <button onclick="filterCatalog('digestive')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Digestive Care
+                </button>
+                <button onclick="filterCatalog('immunity')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Immunity & Energy
+                </button>
+                <button onclick="filterCatalog('mind')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Mind & Stress
+                </button>
+            </div>
+
             <!-- Dynamic Product Grid Layout -->
-            <div id="product-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            <div id="product-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Javascript will render cards here dynamically -->
             </div>
         </div>
@@ -669,44 +685,82 @@
 
     <!-- MAIN JAVASCRIPT STATE CONTROLLER -->
     <script>
-        // Resolve absolute domain paths dynamically to support dual localhost development and cloud instances
-        const API_BASE = window.location.origin.includes('file://') ? 'http://localhost:8000' : '';
+        // High Quality Ayurvedic Herbal Products Array matching the exact packaging layout on Untitled.jpeg
+        const products = [
+            {
+                id: 1,
+                title: "Ashwagandha Powder",
+                category: "mind",
+                tag: "Stress & Strength Support",
+                price: 549.00,
+                weight: "200g",
+                rating: 4.9,
+                bestSeller: true,
+                description: "Authentic Ashwagandha root powder designed to build everyday stamina, relieve cortisol stress levels, and restore balanced energy reserves.",
+                img: "https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=400"
+            },
+            {
+                id: 2,
+                title: "Moringa Powder",
+                category: "immunity",
+                tag: "Plant-Based Nutrition",
+                price: 449.00,
+                weight: "200g",
+                rating: 4.8,
+                bestSeller: true,
+                description: "Superfood Moringa leaf powder. Loaded with biological micronutrients, minerals, and clean herbal proteins that fortify organic immune health.",
+                img: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400"
+            },
+            {
+                id: 3,
+                title: "Triphala Powder",
+                category: "digestive",
+                tag: "Daily Digestive Care",
+                price: 449.00,
+                weight: "200g",
+                rating: 4.7,
+                bestSeller: true,
+                description: "Balanced traditional formulation of Amalaki, Bibhitaki, and Haritaki. Supports absolute metabolic detoxification, gentle daily relief, and gut microbiome balance.",
+                img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400"
+            },
+            {
+                id: 4,
+                title: "Wheatgrass Powder",
+                category: "immunity",
+                tag: "Alkalizing Green Food",
+                price: 499.00,
+                weight: "200g",
+                rating: 4.6,
+                bestSeller: false,
+                description: "Young nutrient-rich green grass powder. Promotes heavy metal detoxification, helps maintain body alkalinity, and supports optimal skin brightness.",
+                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400"
+            },
+            {
+                id: 5,
+                title: "Shatavari Powder",
+                category: "mind",
+                tag: "Nourishing Wellness Adaptogen",
+                price: 549.00,
+                weight: "200g",
+                rating: 4.8,
+                bestSeller: false,
+                description: "Traditional adaptogen powder crafted for complete support of female hormonal health, stress relief, and biological cellular vitality.",
+                img: "https://images.unsplash.com/photo-1632292224971-0d45778b3002?w=400"
+            }
+        ];
 
-        // Dynamic Product Storage
-        let products = [];
+        // Global Cart State
         let cart = [];
 
         // App Initializer
         window.addEventListener('DOMContentLoaded', () => {
-            loadInventoryData();
+            renderCatalog(products);
+            updateCartBadge();
         });
-
-        // Pull Inventory dynamically
-        async function loadInventoryData() {
-            try {
-                const response = await fetch(`${API_BASE}/api/inventory`);
-                products = await response.json();
-                renderCatalog(products);
-                updateCartBadge();
-            } catch (error) {
-                console.warn("Dynamic API unreachable, using local mock fallbacks");
-                products = [
-                    { id: 201, title: "Triphala Powder", tag: "Daily Digestive Care", price: 449.00, weight: "200g", rating: "4.8", bestSeller: true, description: "Traditional digestion formula.", img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400" },
-                    { id: 202, title: "Moringa Powder", tag: "Plant-Based Nutrition", price: 449.00, weight: "200g", rating: "4.8", bestSeller: true, description: "Natural green superfood energy boost.", img: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400" },
-                    { id: 203, title: "Ashwagandha Powder", tag: "Stress & Strength Support", price: 549.00, weight: "200g", rating: "4.9", bestSeller: true, description: "Sourced root powder for daily stamina.", img: "https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=400" },
-                    { id: 204, title: "Wheatgrass Powder", tag: "Alkalizing Green Food", price: 499.00, weight: "200g", rating: "4.6", bestSeller: false, description: "Nutrient-rich grass supporting body alkalinity.", img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400" },
-                    { id: 205, title: "Shatavari Powder", tag: "Nourishing Wellness Adaptogen", price: 549.00, weight: "200g", rating: "4.8", bestSeller: false, description: "Herbal adaptogen supporting female hormone balances.", img: "https://images.unsplash.com/photo-1632292224971-0d45778b3002?w=400" }
-                ];
-                renderCatalog(products);
-                updateCartBadge();
-            }
-        }
 
         // 1. Dynamic Catalog Rendering
         function renderCatalog(items) {
             const container = document.getElementById('product-grid-container');
-            if (!container) return;
-
             if (items.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full text-center py-12 text-brand-charcoal/60">
@@ -724,20 +778,20 @@
                     <div class="w-full aspect-square bg-brand-sageLight rounded-2xl overflow-hidden flex items-center justify-center p-6 relative">
                         <img src="${p.img}" alt="${p.title}" class="w-4/5 h-4/5 object-contain transition-transform duration-300 group-hover:scale-105" />
                         <div class="absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm text-[9px] font-bold text-brand-forest uppercase tracking-wider px-2 py-1 rounded-md border border-brand-sand">
-                            ${p.weight || '200g'}
+                            ${p.weight}
                         </div>
                     </div>
 
                     <!-- Details Area -->
                     <div class="mt-4 space-y-2">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-brand-accent block">${p.tag || 'Ayurvedic Botanical'}</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-brand-accent block">${p.tag}</span>
                         <h4 class="font-serif text-lg font-bold text-brand-forest group-hover:text-brand-accent transition-colors truncate">${p.title}</h4>
                         
                         <div class="flex items-center justify-between pt-1">
                             <span class="font-serif font-bold text-base text-brand-forest">₹${p.price.toFixed(2)}</span>
                             <div class="flex items-center gap-1 text-[11px] text-brand-charcoal/70">
                                 <i class="fa-solid fa-star text-yellow-500 text-[10px]"></i>
-                                <span class="font-bold text-brand-forest">${p.rating || '4.8'}</span>
+                                <span class="font-bold text-brand-forest">${p.rating}</span>
                             </div>
                         </div>
                     </div>
@@ -769,6 +823,24 @@
             } else if (id === 3) {
                 img.src = "https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=500"; // Ashwagandha
                 buttons[2].className = "hero-selector-btn active flex-1 flex flex-col items-center p-2 rounded-xl transition-all bg-brand-sage text-brand-forest";
+            }
+        }
+
+        // Catalog Filter Method
+        function filterCatalog(category) {
+            const buttons = document.querySelectorAll('.catalog-filter-btn');
+            buttons.forEach(btn => {
+                btn.className = "catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand";
+            });
+
+            // Set Active State
+            event.target.className = "catalog-filter-btn active bg-brand-forest text-brand-cream text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all";
+
+            if (category === 'all') {
+                renderCatalog(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderCatalog(filtered);
             }
         }
 
@@ -812,10 +884,10 @@
             if (!product) return;
 
             document.getElementById('modal-product-img').src = product.img;
-            document.getElementById('modal-product-tag').innerText = product.tag || 'Ayurvedic Formulation';
-            document.getElementById('modal-product-weight').innerText = `Pack Size: ${product.weight || '200g'}`;
+            document.getElementById('modal-product-tag').innerText = product.tag;
+            document.getElementById('modal-product-weight').innerText = `Pack Size: ${product.weight}`;
             document.getElementById('modal-product-title').innerText = product.title;
-            document.getElementById('modal-product-rating').innerText = `${product.rating || '4.8'} / 5.0 Rating`;
+            document.getElementById('modal-product-rating').innerText = `${product.rating} / 5.0 Rating`;
             document.getElementById('modal-product-desc').innerText = product.description;
             document.getElementById('modal-product-price').innerText = `₹${product.price.toFixed(2)}`;
 
@@ -851,7 +923,7 @@
                     <img src="${p.img}" alt="${p.title}" class="w-10 h-10 object-contain bg-brand-sageLight rounded-lg p-1" />
                     <div>
                         <h5 class="text-xs font-bold text-brand-forest">${p.title}</h5>
-                        <p class="text-[10px] text-brand-accent">${p.tag || 'Ayurvedic'} • ₹${p.price}</p>
+                        <p class="text-[10px] text-brand-accent">${p.tag} • ₹${p.price}</p>
                     </div>
                 </div>
             `).join('');
@@ -862,16 +934,19 @@
             const body = document.getElementById(`faq-body-${index}`);
             const icon = document.getElementById(`faq-icon-${index}`);
             
+            // Check if current is expanded
             if (body.style.maxHeight && body.style.maxHeight !== '0px') {
                 body.style.maxHeight = '0px';
                 icon.style.transform = 'rotate(0deg)';
             } else {
+                // Close all others first
                 for (let i = 0; i < 3; i++) {
                     const otherBody = document.getElementById(`faq-body-${i}`);
                     const otherIcon = document.getElementById(`faq-icon-${i}`);
                     if (otherBody) otherBody.style.maxHeight = '0px';
                     if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
                 }
+                // Open selected
                 body.style.maxHeight = body.scrollHeight + 'px';
                 icon.style.transform = 'rotate(180deg)';
             }
@@ -894,10 +969,12 @@
 
             container.appendChild(toast);
 
+            // Trigger Animation Frame
             requestAnimationFrame(() => {
                 toast.classList.remove('translate-y-2', 'opacity-0');
             });
 
+            // Remove automatically
             setTimeout(() => {
                 toast.classList.add('translate-y-2', 'opacity-0');
                 setTimeout(() => {
@@ -911,6 +988,7 @@
             const product = products.find(p => p.id === productId);
             if (!product) return;
 
+            // Check if product exists inside current cart list state
             const existingItem = cart.find(item => item.id === productId);
             if (existingItem) {
                 existingItem.quantity += 1;
@@ -982,7 +1060,7 @@
                         <img src="${item.img}" alt="${item.title}" class="w-14 h-14 object-contain bg-brand-sageLight rounded-xl p-2 border border-brand-sand" />
                         <div class="flex-1 min-w-0">
                             <h4 class="font-serif font-bold text-sm text-brand-forest truncate">${item.title}</h4>
-                            <span class="text-[10px] text-brand-accent block uppercase tracking-wider">${item.tag || 'Ayurvedic'}</span>
+                            <span class="text-[10px] text-brand-accent block uppercase tracking-wider">${item.tag}</span>
                             <div class="flex items-center justify-between mt-2">
                                 <span class="font-bold text-xs text-brand-forest">₹${totalItemPrice.toFixed(2)}</span>
                                 <div class="flex items-center gap-2 border border-brand-sand rounded-lg bg-white p-1">
@@ -999,7 +1077,7 @@
             totalValueSpan.innerText = `₹${subtotal.toFixed(2)}`;
         }
 
-        // Local dynamic checkout trigger API simulator
+        // Local dynamic checkout trigger API simulator (Gracefully falls back if server offline)
         async function triggerCheckoutLocal() {
             if (cart.length === 0) {
                 showNotification("Add formulations to basket first!", false);
@@ -1016,7 +1094,8 @@
             };
 
             try {
-                const response = await fetch(`${API_BASE}/api/checkout-session`, {
+                // Post checkout to running local node server pipeline
+                const response = await fetch('http://localhost:8000/api/checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(checkoutBody)
@@ -1031,6 +1110,7 @@
                     toggleCartDrawer(false);
                 }
             } catch (error) {
+                // Standalone Sandbox Fallback Mode
                 const fallbackId = `AKH-LOCAL-${Math.floor(Math.random() * 90000) + 10000}`;
                 showNotification(`Offline Order Logged! Tracking code: ${fallbackId}`);
                 cart = [];
