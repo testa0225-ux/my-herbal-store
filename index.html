@@ -3,286 +3,1129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aushadhi Kunj Harbal - Local Sandbox Store</title>
-    <!-- FontAwesome icons for a clean professional UI -->
+    <title>The Good Source - Rooted in Ayurveda</title>
+    
+    <!-- External CSS & Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Elegant Playfair Display and Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            forest: '#1E3F20',
+                            forestLight: '#2D5830',
+                            sage: '#E2EBE1',
+                            sageLight: '#F1F5F0',
+                            cream: '#F9F6F0',
+                            sand: '#F2EBE1',
+                            accent: '#A07855',
+                            charcoal: '#2D312E'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --primary: #1e5631; /* Deep Herbal Green */
-            --accent: #4c9a2a; /* Light Natural Green */
-            --text-main: #2b2b2b;
-            --text-light: #666666;
-            --bg-light: #f7f9f6;
-            --star-color: #ffb400;
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: #fff; color: var(--text-main); }
-
-        /* Announcement Bar */
-        .announcement-bar {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* Navbar Header */
-        header {
-            background: white;
-            border-bottom: 1px solid #eaeaea;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        ::-webkit-scrollbar-track {
+            background: #F9F6F0;
         }
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
+        ::-webkit-scrollbar-thumb {
+            background: #2D5830;
+            border-radius: 4px;
         }
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--accent); }
-        .cart-trigger {
-            background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main);
-            position: relative; display: flex; align-items: center; gap: 8px;
-        }
-        .cart-badge {
-            background: var(--accent); color: white; border-radius: 50%; padding: 2px 6px;
-            font-size: 0.75rem; font-weight: bold; position: absolute; top: -8px; right: -12px;
-        }
-
-        /* Hero Banner Section */
-        .hero {
-            background: linear-gradient(135px, #e8f5e9 0%, #c8e6c9 100%);
-            padding: 50px 20px; text-align: center; border-bottom: 4px solid var(--primary);
-        }
-        .hero h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 10px; }
-        .hero p { color: var(--text-light); font-size: 1.1rem; }
-
-        /* Trust Grid Badges */
-        .trust-badges {
-            max-width: 1200px; margin: 30px auto; display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 0 20px;
-        }
-        .badge-item {
-            display: flex; align-items: center; gap: 10px; padding: 15px;
-            background: var(--bg-light); border-radius: 8px; border: 1px dashed #c8e6c9;
-        }
-        .badge-item i { color: var(--accent); font-size: 1.5rem; }
-        .badge-item span { font-size: 0.85rem; font-weight: 600; color: var(--primary); }
-
-        /* Product Gallery Area */
-        .main-container { max-width: 1200px; margin: 0 auto 60px; padding: 0 20px; }
-        .section-title { font-size: 1.8rem; border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 30px; color: var(--primary); }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 30px; }
-        .product-card {
-            background: white; border: 1px solid #eef2ed; border-radius: 12px; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
-        
-        .best-seller-tag {
-            position: absolute; top: 12px; left: 12px; background: #e53935; color: white;
-            font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; z-index: 2;
-        }
-        .img-wrapper { width: 100%; height: 230px; background: #fafafa; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .product-card img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .stars { color: var(--star-color); font-size: 0.9rem; margin-bottom: 5px; }
-        .stars span { color: var(--text-light); font-size: 0.8rem; margin-left: 5px; }
-        .product-title { font-size: 1.05rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px; height: 44px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .product-desc { font-size: 0.85rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.4; }
-        .price-row { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 15px; }
-        
-        .add-btn {
-            background-color: var(--primary); color: white; border: none; padding: 12px;
-            width: 100%; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;
-        }
-        .add-btn:hover { background-color: var(--accent); }
-
-        /* Slide-out Shopping Cart Sidebar Drawer */
-        .cart-drawer {
-            position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
-            background: white; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 1000;
-            display: flex; flex-direction: column; transition: right 0.3s ease;
-        }
-        .cart-drawer.open { right: 0; }
-        .cart-header { padding: 20px; background: var(--bg-light); border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; }
-        .cart-header h3 { color: var(--primary); }
-        .close-cart { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-light); }
-        .cart-items-list { padding: 20px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
-        .cart-footer { padding: 20px; border-top: 1px solid #eaeaea; background: #fff; }
-        .checkout-btn { background: var(--accent); color: white; border: none; width: 100%; padding: 14px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 1rem; }
-        .checkout-btn:hover { background: var(--primary); }
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 999; display: none; }
-        .cart-overlay.open { display: block; }
     </style>
 </head>
-<body>
+<body class="bg-[#FFFDFB] text-brand-charcoal font-sans antialiased">
 
-    <div class="announcement-bar">✨ EXTRA 10% OFF ON ONLINE PAYMENT | 100% NATURAL AYURVEDIC SOLUTIONS ✨</div>
+    <!-- Toast Notification Container (Custom replacement for alert) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo"><i class="fa-solid fa-leaf"></i> Aushadhi Kunj Harbal</a>
-            <ul class="nav-links">
-                <li><a href="#">Pain Relief</a></li>
-                <li><a href="#">Skin Care</a></li>
-                <li><a href="#">Digestive Health</a></li>
-                <li><a href="#">Wellness</a></li>
-            </ul>
-            <button class="cart-trigger" onclick="toggleCart(true)">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span class="cart-badge" id="cart-count">0</span>
-            </button>
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-forest text-brand-sage text-center py-2 px-4 text-xs font-semibold tracking-wider uppercase">
+        🌿 100% Organic & Chemical-Free Ayurvedic Essentials. Free Shipping on Orders above ₹999 🌿
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 bg-brand-cream/95 backdrop-blur-md border-b border-brand-sand z-40 transition-all">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="bg-brand-forest text-brand-cream p-2 rounded-full transition-transform group-hover:rotate-12">
+                    <i class="fa-solid fa-seedling text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-serif text-xl md:text-2xl font-bold text-brand-forest tracking-tight">The Good Source</span>
+                    <p class="text-[9px] uppercase tracking-widest text-brand-accent font-bold">Purely Natural. Purely You.</p>
+                </div>
+            </a>
+
+            <!-- Navigation Links (Centered) -->
+            <nav class="hidden lg:flex items-center gap-8">
+                <a href="#benefits" class="text-brand-charcoal hover:text-brand-forest font-medium text-sm transition-colors">Benefits</a>
+                <a href="#about" class="text-brand-charcoal hover:text-brand-forest font-medium text-sm transition-colors">Our Story</a>
+                <a href="#powders" class="text-brand-charcoal hover:text-brand-forest font-medium text-sm transition-colors">Shop Powders</a>
+                <a href="#how-to-use" class="text-brand-charcoal hover:text-brand-forest font-medium text-sm transition-colors">How to Use</a>
+                <a href="#faq" class="text-brand-charcoal hover:text-brand-forest font-medium text-sm transition-colors">FAQ</a>
+            </nav>
+
+            <!-- Search, Account, Bag Actions -->
+            <div class="flex items-center gap-6">
+                <button class="text-brand-charcoal hover:text-brand-forest transition-colors relative group" onclick="toggleSearchModal(true)">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+                <a href="#" class="text-brand-charcoal hover:text-brand-forest transition-colors hidden sm:block">
+                    <i class="fa-regular fa-user text-lg"></i>
+                </a>
+                <button class="relative text-brand-charcoal hover:text-brand-forest transition-colors p-1" onclick="toggleCartDrawer(true)">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="global-cart-badge" class="absolute -top-1 -right-2 bg-brand-accent text-white rounded-full text-[10px] font-bold w-5 h-5 flex items-center justify-center border-2 border-brand-cream scale-0 transition-transform">0</span>
+                </button>
+                <a href="#powders" class="hidden md:inline-block bg-brand-forest hover:bg-brand-forestLight text-brand-cream font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    Shop Now
+                </a>
+            </div>
         </div>
     </header>
 
-    <section class="hero">
-        <h1>Natural Care, Not Temporary Fixes</h1>
-        <p>Researched & Crafted by Experts | FDA & FSSAI Approved Ingredients</p>
+    <!-- Hero / Intro Banner Section -->
+    <section class="relative bg-brand-cream py-16 lg:py-24 overflow-hidden border-b border-brand-sand">
+        <!-- Floating herbal ambient background assets -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <div class="absolute top-10 left-12 w-32 h-32 bg-brand-forest rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-10 right-24 w-48 h-48 bg-brand-accent rounded-full filter blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            
+            <!-- Left Side Editorial Text -->
+            <div class="lg:col-span-5 text-center lg:text-left">
+                <span class="inline-flex items-center gap-2 bg-brand-sage text-brand-forest text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-6">
+                    <i class="fa-solid fa-leaf"></i> Rooted in Ayurveda
+                </span>
+                <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-brand-forest leading-[1.1] mb-6">
+                    Made for Your <br class="hidden sm:inline" />Everyday Wellness.
+                </h1>
+                <p class="text-brand-charcoal/85 text-base sm:text-lg mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    Pure herbal powders crafted from nature's finest ingredients to support balance, energy, immunity, and holistic well-being.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#powders" class="w-full sm:w-auto bg-brand-forest hover:bg-brand-forestLight text-brand-cream text-sm font-bold uppercase tracking-wider px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-center">
+                        Shop Herbal Powders
+                    </a>
+                    <a href="#about" class="w-full sm:w-auto border border-brand-forest text-brand-forest hover:bg-brand-sage/40 text-sm font-bold uppercase tracking-wider px-8 py-4 rounded-xl transition-all text-center">
+                        Explore Benefits
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side Interactive Product Showcase -->
+            <div class="lg:col-span-7 flex flex-col items-center justify-center">
+                <div class="relative w-full max-w-lg aspect-square bg-[#F3EFE9] rounded-3xl p-8 flex flex-col items-center justify-center shadow-inner border border-brand-sand">
+                    <img id="hero-showcase-img" src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500" alt="Ayurvedic Wellness Pack" class="w-2/3 h-2/3 object-contain drop-shadow-2xl transition-all duration-500 transform hover:scale-105" />
+                    
+                    <!-- Product Quick Selector Bar -->
+                    <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-2xl p-3 border border-brand-sand flex items-center justify-between gap-2 shadow-md">
+                        <button onclick="updateHeroShowcase(1)" class="hero-selector-btn active flex-1 flex flex-col items-center p-2 rounded-xl transition-all bg-brand-sage text-brand-forest">
+                            <span class="text-[10px] font-bold uppercase tracking-wider">Triphala</span>
+                        </button>
+                        <button onclick="updateHeroShowcase(2)" class="hero-selector-btn flex-1 flex flex-col items-center p-2 rounded-xl transition-all hover:bg-brand-sageLight text-brand-charcoal">
+                            <span class="text-[10px] font-bold uppercase tracking-wider">Moringa</span>
+                        </button>
+                        <button onclick="updateHeroShowcase(3)" class="hero-selector-btn flex-1 flex flex-col items-center p-2 rounded-xl transition-all hover:bg-brand-sageLight text-brand-charcoal">
+                            <span class="text-[10px] font-bold uppercase tracking-wider">Ashwagandha</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="trust-badges">
-        <div class="badge-item"><i class="fa-solid fa-circle-check"></i> <span>100% Ayurvedic Formula</span></div>
-        <div class="badge-item"><i class="fa-solid fa-shield-heart"></i> <span>Non Habit Forming</span></div>
-        <div class="badge-item"><i class="fa-solid fa-industry"></i> <span>Made in GMP Facilities</span></div>
-        <div class="badge-item"><i class="fa-solid fa-truck-fast"></i> <span>Delivery in 3,000+ Cities</span></div>
-    </section>
-
-    <main class="main-container">
-        <h2 class="section-title">Our Bestsellers</h2>
-        <div class="product-grid" id="product-catalog"></div>
-    </main>
-
-    <!-- Side Drawer Cart Elements -->
-    <div class="cart-overlay" id="overlay" onclick="toggleCart(false)"></div>
-    <div class="cart-drawer" id="cart-drawer">
-        <div class="cart-header">
-            <h3>Shopping Cart</h3>
-            <button class="close-cart" onclick="toggleCart(false)"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="cart-items-list" id="cart-items-container">
-            <p style="color: var(--text-light); text-align: center; margin-top: 20px;">Your cart is empty.</p>
-        </div>
-        <div class="cart-footer">
-            <button class="checkout-btn" onclick="processCheckout()">Proceed to Checkout</button>
+    <!-- Trust Indicator Banner (Matches icons from Untitled.jpeg) -->
+    <div class="bg-brand-cream border-b border-brand-sand py-6">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest">
+                    <i class="fa-solid fa-certificate"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-brand-forest tracking-wider">100% Natural</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-brand-forest tracking-wider">No Preservatives</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest">
+                    <i class="fa-solid fa-droplet-slash"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-brand-forest tracking-wider">No Artificial Colors</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest">
+                    <i class="fa-solid fa-mortar-pestle"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-brand-forest tracking-wider">Traditional Wellness</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 col-span-2 md:col-span-1">
+                <div class="w-10 h-10 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <span class="text-xs font-bold uppercase text-brand-forest tracking-wider">Everyday Use</span>
+            </div>
         </div>
     </div>
 
-    <script>
-        let shoppingCart = [];
-
-        async function fetchProducts() {
-            try {
-                const res = await fetch('http://localhost:8000/api/inventory');
-                const products = await res.json();
-                const catalog = document.getElementById('product-catalog');
+    <!-- "Why Choose The Good Source?" Section -->
+    <section id="benefits" class="py-20 bg-white border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                catalog.innerHTML = products.map(p => `
-                    <div class="product-card">
-                        ${p.bestSeller ? '<div class="best-seller-tag">Best Seller</div>' : ''}
-                        <div class="img-wrapper">
-                            <img src="${p.img}" alt="${p.title}">
-                        </div>
-                        <div class="card-content">
-                            <div>
-                                <div class="stars">
-                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                                    <span>${p.rating}</span>
-                                </div>
-                                <h3 class="product-title">${p.title}</h3>
-                                <p class="product-desc">${p.description}</p>
+                <!-- Left Side Infographic Points -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mb-4 leading-snug">
+                            Why Choose <br />The Good Source? 🌿
+                        </h2>
+                        <p class="text-brand-charcoal/80 text-sm sm:text-base leading-relaxed">
+                            We blend the wisdom of Ayurveda with modern quality standards to bring you the best of nature, harvested ethically and packaged purely.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Point 1 -->
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-sageLight border border-brand-sage flex items-center justify-center text-brand-forest">
+                                <i class="fa-solid fa-leaf text-lg"></i>
                             </div>
                             <div>
-                                <div class="price-row">Rs. ${p.price.toFixed(2)}</div>
-                                <button class="add-btn" onclick="addItemToCart(${p.id}, '${p.title}', ${p.price})">
-                                    <i class="fa-solid fa-cart-plus"></i> ADD TO CART
-                                </button>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-forest mb-1">Pure & Natural</h4>
+                                <p class="text-xs sm:text-sm text-brand-charcoal/75">Sourced from trusted biodiverse organic farms, containing absolutely zero synthetic additives.</p>
+                            </div>
+                        </div>
+                        <!-- Point 2 -->
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-sageLight border border-brand-sage flex items-center justify-center text-brand-forest">
+                                <i class="fa-solid fa-scroll text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-forest mb-1">Ayurvedic & Authentic</h4>
+                                <p class="text-xs sm:text-sm text-brand-charcoal/75">Rooted firmly in timeless herbal wisdom and prepared using classical methods.</p>
+                            </div>
+                        </div>
+                        <!-- Point 3 -->
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-sageLight border border-brand-sage flex items-center justify-center text-brand-forest">
+                                <i class="fa-solid fa-heart-pulse text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm sm:text-base text-brand-forest mb-1">Gentle & Effective</h4>
+                                <p class="text-xs sm:text-sm text-brand-charcoal/75">Tested, safe, and balanced formulations perfect for modern hectic lifestyles.</p>
                             </div>
                         </div>
                     </div>
-                `).join('');
-            } catch (error) {
-                document.getElementById('product-catalog').innerHTML = `<p style="color:red; grid-column:1/-1; text-align:center;">Make sure 'node app.js' is running in your terminal.</p>`;
-            }
-        }
+                </div>
 
-        function toggleCart(isOpen) {
-            document.getElementById('cart-drawer').classList.toggle('open', isOpen);
-            document.getElementById('overlay').classList.toggle('open', isOpen);
-        }
+                <!-- Right Side Creative Graphics -->
+                <div class="lg:col-span-7">
+                    <div class="relative rounded-3xl overflow-hidden border border-brand-sand shadow-lg aspect-[4/3] bg-brand-cream flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800" alt="Matcha and Herb Bowl Arrangement" class="absolute inset-0 w-full h-full object-cover filter brightness-95" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-forest/60 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 border border-brand-sand shadow-lg max-w-md">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-brand-accent">Traditional Wisdom</span>
+                            <h3 class="font-serif text-lg sm:text-xl font-bold text-brand-forest mt-1 mb-2">The Golden Ratio of Herbs</h3>
+                            <p class="text-xs text-brand-charcoal/80 leading-relaxed">Our powders are ground at gentle temperatures to retain volatile medicinal active elements, making them twice as potent.</p>
+                        </div>
+                    </div>
+                </div>
 
-        function addItemToCart(id, title, price) {
-            shoppingCart.push({ id, title, price });
-            updateCartUI();
-            toggleCart(true); // Automatically open drawer when item is added
-        }
+            </div>
+        </div>
+    </section>
 
-        function updateCartUI() {
-            document.getElementById('cart-count').innerText = shoppingCart.length;
-            const container = document.getElementById('cart-items-container');
+    <!-- Category Deck Section: "Wellness, The Ayurvedic Way" -->
+    <section class="py-20 bg-brand-cream/65 border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Wellness, The Ayurvedic Way</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mt-2 mb-4">Support Your Mind & Body</h2>
+            <p class="text-brand-charcoal/80 text-sm max-w-xl mx-auto mb-12">Support your daily body rhythm and mind with nature's time-tested wellness goodness.</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <!-- Pillar 1 -->
+                <div class="bg-white border border-brand-sand p-6 rounded-2xl flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest mb-4">
+                        <i class="fa-solid fa-shield text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-forest mb-1">Immunity Support</h4>
+                    <p class="text-[11px] text-brand-charcoal/70">Strengthen your body's natural defense.</p>
+                </div>
+                <!-- Pillar 2 -->
+                <div class="bg-white border border-brand-sand p-6 rounded-2xl flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest mb-4">
+                        <i class="fa-solid fa-fire text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-forest mb-1">Digestion & Gut</h4>
+                    <p class="text-[11px] text-brand-charcoal/70">Promote healthy digestion & bowel balance.</p>
+                </div>
+                <!-- Pillar 3 -->
+                <div class="bg-white border border-brand-sand p-6 rounded-2xl flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest mb-4">
+                        <i class="fa-solid fa-wind text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-forest mb-1">Daily Detox</h4>
+                    <p class="text-[11px] text-brand-charcoal/70">Flush toxins and feel lighter every day.</p>
+                </div>
+                <!-- Pillar 4 -->
+                <div class="bg-white border border-brand-sand p-6 rounded-2xl flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest mb-4">
+                        <i class="fa-solid fa-person-dress text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-forest mb-1">Women's Wellness</h4>
+                    <p class="text-[11px] text-brand-charcoal/70">Balance hormones and support vitality.</p>
+                </div>
+                <!-- Pillar 5 -->
+                <div class="bg-white border border-brand-sand p-6 rounded-2xl flex flex-col items-center text-center col-span-2 md:col-span-1 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-14 h-14 rounded-full bg-brand-sage/60 flex items-center justify-center text-brand-forest mb-4">
+                        <i class="fa-solid fa-brain text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-brand-forest mb-1">Stress & Balance</h4>
+                    <p class="text-[11px] text-brand-charcoal/70">Calm the mind and restore inner peace.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- "Our Herbal Powders" Store Section -->
+    <section id="powders" class="py-20 bg-white border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Our Herbal Powders</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mt-2 mb-4">Pure. Potent. Purposeful.</h2>
+                <p class="text-brand-charcoal/80 text-sm max-w-lg mx-auto">Click any product card to see its active Ayurvedic profile. Add to your basket below.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+                <button onclick="filterCatalog('all')" class="catalog-filter-btn active bg-brand-forest text-brand-cream text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all">
+                    All Powders
+                </button>
+                <button onclick="filterCatalog('digestive')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Digestive Care
+                </button>
+                <button onclick="filterCatalog('immunity')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Immunity & Energy
+                </button>
+                <button onclick="filterCatalog('mind')" class="catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand">
+                    Mind & Stress
+                </button>
+            </div>
+
+            <!-- Dynamic Product Grid Layout -->
+            <div id="product-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Javascript will render cards here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Ways to Use Section (Matches recipe row in Untitled.jpeg) -->
+    <section id="how-to-use" class="py-20 bg-brand-cream border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Simple Ways to Use - Every Scoop</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mt-2 mb-12">How to Integrate Into Your Day</h2>
             
-            if(shoppingCart.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-light); text-align: center; margin-top: 20px;">Your cart is empty.</p>`;
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white border border-brand-sand rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=400" alt="Smoothies" class="w-24 h-24 object-cover rounded-full mx-auto mb-4 border-2 border-brand-sage" />
+                    <h4 class="font-bold text-brand-forest text-base mb-2">Smoothies</h4>
+                    <p class="text-xs text-brand-charcoal/70">Blend a single teaspoon directly into morning smoothies for a quick nutrient boost.</p>
+                </div>
+                <div class="bg-white border border-brand-sand rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400" alt="Shakes" class="w-24 h-24 object-cover rounded-full mx-auto mb-4 border-2 border-brand-sage" />
+                    <h4 class="font-bold text-brand-forest text-base mb-2">Shakes</h4>
+                    <p class="text-xs text-brand-charcoal/70">Mix with your favorite plant-based milk or overnight oats for lasting afternoon fuel.</p>
+                </div>
+                <div class="bg-white border border-brand-sand rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=400" alt="Warm Water" class="w-24 h-24 object-cover rounded-full mx-auto mb-4 border-2 border-brand-sage" />
+                    <h4 class="font-bold text-brand-forest text-base mb-2">Warm Water</h4>
+                    <p class="text-xs text-brand-charcoal/70">Stir into warm water first thing in the morning to kindle digestive fire (Agni).</p>
+                </div>
+                <div class="bg-white border border-brand-sand rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+                    <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400" alt="Daily Wellness Drinks" class="w-24 h-24 object-cover rounded-full mx-auto mb-4 border-2 border-brand-sage" />
+                    <h4 class="font-bold text-brand-forest text-base mb-2">Wellness Tea</h4>
+                    <p class="text-xs text-brand-charcoal/70">Add a scoop to herbal tea with honey for calming evening ritual wellness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- "Our Story" & Legacy Section -->
+    <section id="about" class="py-20 bg-white border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Side Image Montage -->
+            <div class="lg:col-span-6">
+                <div class="relative rounded-3xl overflow-hidden border border-brand-sand aspect-video lg:aspect-square">
+                    <img src="https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=800" alt="Fresh herbs, spices, powders on wooden board" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-brand-forest/10"></div>
+                </div>
+            </div>
+
+            <!-- Right Side Story Content -->
+            <div class="lg:col-span-6 space-y-6">
+                <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Our Story</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest leading-snug">
+                    Inspired by Ayurveda. <br />Made for Natural Living.
+                </h2>
+                <p class="text-brand-charcoal/80 text-sm sm:text-base leading-relaxed">
+                    The Good Source was born from a simple belief – that nature has the power to heal, balance, and transform. Guided by the ancient holistic wisdom of Ayurveda, we bring you premium single-ingredient herbal powders that fit seamlessly into modern wellness routines.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-4 pt-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                        <span class="text-xs font-bold text-brand-forest uppercase tracking-wider">Ancient Wisdom</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                        <span class="text-xs font-bold text-brand-forest uppercase tracking-wider">Pure Ingredients</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                        <span class="text-xs font-bold text-brand-forest uppercase tracking-wider">Conscious Living</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-brand-accent"></i>
+                        <span class="text-xs font-bold text-brand-forest uppercase tracking-wider">Sustainable Choices</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Testimonials / "Loved by Thousands" -->
+    <section class="py-20 bg-brand-cream/40 border-b border-brand-sand">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Loved by Thousands</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mt-2 mb-12">Verified Customer Stories</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white border border-brand-sand p-8 rounded-2xl text-left shadow-sm flex flex-col justify-between">
+                    <p class="text-brand-charcoal/80 text-sm italic leading-relaxed mb-6">
+                        "Ashwagandha Powder has become an essential part of my daily tea routine. I feel more calm, energised, and my sleep has improved dramatically."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" alt="Neha S." class="w-12 h-12 object-cover rounded-full border-2 border-brand-sage" />
+                        <div>
+                            <h5 class="font-bold text-brand-forest text-sm">Neha S.</h5>
+                            <div class="text-brand-star-color text-xs text-yellow-500">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="bg-white border border-brand-sand p-8 rounded-2xl text-left shadow-sm flex flex-col justify-between">
+                    <p class="text-brand-charcoal/80 text-sm italic leading-relaxed mb-6">
+                        "Triphala powder has worked absolute wonders for my digestion. It's incredibly pure and gentle compared to store-bought pills."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Rohit M." class="w-12 h-12 object-cover rounded-full border-2 border-brand-sage" />
+                        <div>
+                            <h5 class="font-bold text-brand-forest text-sm">Rohit M.</h5>
+                            <div class="text-brand-star-color text-xs text-yellow-500">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="bg-white border border-brand-sand p-8 rounded-2xl text-left shadow-sm flex flex-col justify-between">
+                    <p class="text-brand-charcoal/80 text-sm italic leading-relaxed mb-6">
+                        "Moringa powder is my daily green superfood go-to. Extremely fine texture and matches perfectly with my protein shakes."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Priya K." class="w-12 h-12 object-cover rounded-full border-2 border-brand-sage" />
+                        <div>
+                            <h5 class="font-bold text-brand-forest text-sm">Priya K.</h5>
+                            <div class="text-brand-star-color text-xs text-yellow-500">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Accordion Block -->
+    <section id="faq" class="py-20 bg-white border-b border-brand-sand">
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Your Questions, Answered</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-brand-forest mt-2">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ item 1 -->
+                <div class="border border-brand-sand rounded-xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(0)" class="w-full flex items-center justify-between p-5 bg-brand-cream hover:bg-brand-sage/20 transition-colors text-left">
+                        <span class="font-bold text-sm sm:text-base text-brand-forest">How should I consume single herb powders?</span>
+                        <i id="faq-icon-0" class="fa-solid fa-chevron-down text-brand-forest transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-body-0" class="max-h-0 overflow-hidden transition-all duration-300 ease-out bg-white">
+                        <p class="p-5 text-xs sm:text-sm text-brand-charcoal/80 leading-relaxed">
+                            Single herb powders can be mixed with lukewarm water, milk, or smoothies. Most herbs are best consumed on an empty stomach in the morning or before bedtime as recommended by Ayurvedic principles.
+                        </p>
+                    </div>
+                </div>
+                <!-- FAQ item 2 -->
+                <div class="border border-brand-sand rounded-xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(1)" class="w-full flex items-center justify-between p-5 bg-brand-cream hover:bg-brand-sage/20 transition-colors text-left">
+                        <span class="font-bold text-sm sm:text-base text-brand-forest">Are these powders organic and chemical free?</span>
+                        <i id="faq-icon-1" class="fa-solid fa-chevron-down text-brand-forest transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-body-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-out bg-white">
+                        <p class="p-5 text-xs sm:text-sm text-brand-charcoal/80 leading-relaxed">
+                            Yes, absolutely. All our raw materials are ethically harvested from bio-diverse organic soil partners. We do not apply synthetic heat, chemical preservatives, or coloring agents to retain pure therapeutic values.
+                        </p>
+                    </div>
+                </div>
+                <!-- FAQ item 3 -->
+                <div class="border border-brand-sand rounded-xl overflow-hidden transition-all duration-300">
+                    <button onclick="toggleFaq(2)" class="w-full flex items-center justify-between p-5 bg-brand-cream hover:bg-brand-sage/20 transition-colors text-left">
+                        <span class="font-bold text-sm sm:text-base text-brand-forest">Can I consume multiple herb blends together?</span>
+                        <i id="faq-icon-2" class="fa-solid fa-chevron-down text-brand-forest transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-body-2" class="max-h-0 overflow-hidden transition-all duration-300 ease-out bg-white">
+                        <p class="p-5 text-xs sm:text-sm text-brand-charcoal/80 leading-relaxed">
+                            Generally yes, as Ayurvedic formulations often complement each other. However, if you are treating specific health conditions, we highly suggest consulting an Ayurvedic practitioner first for tailored proportions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section (Detailed with premium branding matching Untitled.jpeg) -->
+    <footer class="bg-brand-forest text-brand-cream pt-16 pb-8 border-t border-brand-forestLight">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-brand-forestLight">
+                
+                <!-- Brand Profile -->
+                <div class="md:col-span-4 space-y-4 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-2">
+                        <div class="bg-brand-accent text-brand-cream p-2 rounded-full">
+                            <i class="fa-solid fa-seedling text-lg"></i>
+                        </div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-white">The Good Source</span>
+                    </div>
+                    <p class="text-xs text-brand-sage/75 max-w-sm leading-relaxed mx-auto md:mx-0">
+                        Nourishing modern life with premium, unadulterated Ayurvedic single-ingredient powders sourced from nature's deepest farms.
+                    </p>
+                    <div class="flex justify-center md:justify-start gap-4 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-forestLight hover:bg-brand-accent flex items-center justify-center transition-colors text-brand-cream"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-forestLight hover:bg-brand-accent flex items-center justify-center transition-colors text-brand-cream"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-forestLight hover:bg-brand-accent flex items-center justify-center transition-colors text-brand-cream"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Foot links Column 1 -->
+                <div class="md:col-span-2 text-center md:text-left">
+                    <h5 class="text-xs uppercase font-bold tracking-wider text-brand-accent mb-4">Shop</h5>
+                    <ul class="space-y-2 text-xs text-brand-sage/80 font-medium">
+                        <li><a href="#powders" class="hover:text-white transition-colors">All Products</a></li>
+                        <li><a href="#powders" class="hover:text-white transition-colors">Best Sellers</a></li>
+                        <li><a href="#powders" class="hover:text-white transition-colors">Digestive Care</a></li>
+                        <li><a href="#powders" class="hover:text-white transition-colors">Immunity & Stress</a></li>
+                    </ul>
+                </div>
+
+                <!-- Foot links Column 2 -->
+                <div class="md:col-span-2 text-center md:text-left">
+                    <h5 class="text-xs uppercase font-bold tracking-wider text-brand-accent mb-4">Learn</h5>
+                    <ul class="space-y-2 text-xs text-brand-sage/80 font-medium">
+                        <li><a href="#about" class="hover:text-white transition-colors">About Ayurveda</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Our Story</a></li>
+                        <li><a href="#benefits" class="hover:text-white transition-colors">Benefits Guide</a></li>
+                        <li><a href="#how-to-use" class="hover:text-white transition-colors">Recipes & Scoops</a></li>
+                    </ul>
+                </div>
+
+                <!-- Foot Newsletter Form -->
+                <div class="md:col-span-4 space-y-4 text-center md:text-left">
+                    <h5 class="text-xs uppercase font-bold tracking-wider text-brand-accent">Stay Connected</h5>
+                    <p class="text-xs text-brand-sage/75">Subscribe to receive healthy tips, botanical updates, and first order discount coupons.</p>
+                    <form onsubmit="handleNewsletterSubmit(event)" class="flex gap-2 max-w-sm mx-auto md:mx-0">
+                        <input type="email" placeholder="Your email address" required class="flex-1 bg-brand-forestLight text-white text-xs px-4 py-3 rounded-xl border border-transparent focus:border-brand-accent focus:outline-none placeholder-brand-sage/55" />
+                        <button type="submit" class="bg-brand-accent hover:bg-brand-accent/90 text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-xl transition-all">Join</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Bottom Note -->
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                <p class="text-[11px] text-brand-sage/60">&copy; 2026 The Good Source Pvt Ltd. All rights reserved.</p>
+                <div class="flex items-center gap-6 text-[11px] text-brand-sage/60">
+                    <a href="#" class="hover:text-white">Privacy Policy</a>
+                    <a href="#" class="hover:text-white">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Drawer Element for Cart -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 bg-brand-charcoal/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-all duration-300" onclick="toggleCartDrawer(false)"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-brand-cream shadow-2xl z-50 translate-x-full transition-transform duration-300 ease-out flex flex-col border-l border-brand-sand">
+        <!-- Cart Drawer Header -->
+        <div class="p-6 bg-brand-cream border-b border-brand-sand flex items-center justify-between">
+            <h3 class="font-serif text-xl font-bold text-brand-forest flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping"></i> Your Basket
+            </h3>
+            <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-brand-sage/40 hover:bg-brand-sage flex items-center justify-center text-brand-forest">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List Container -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div class="text-center py-12 text-brand-charcoal/65">
+                <i class="fa-solid fa-box-open text-4xl mb-4 text-brand-sand"></i>
+                <p class="text-sm">Your active wellness basket is currently empty.</p>
+                <a href="#powders" onclick="toggleCartDrawer(false)" class="inline-block mt-4 text-xs font-bold uppercase tracking-wider text-brand-accent border-b border-brand-accent pb-0.5">Explore Powders</a>
+            </div>
+        </div>
+
+        <!-- Cart Footer Checkout Area -->
+        <div class="p-6 bg-white border-t border-brand-sand space-y-4">
+            <div class="flex items-center justify-between text-brand-forest">
+                <span class="font-bold text-sm uppercase tracking-wider">Subtotal:</span>
+                <span id="cart-total-value" class="font-bold text-lg font-serif">₹0.00</span>
+            </div>
+            <button onclick="triggerCheckoutLocal()" class="w-full bg-brand-forest hover:bg-brand-forestLight text-brand-cream text-xs font-bold uppercase tracking-widest py-4 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Modal Popover Overlay -->
+    <div id="search-modal" class="fixed inset-0 bg-brand-charcoal/40 backdrop-blur-sm z-50 hidden flex items-start justify-center pt-24 px-4" onclick="toggleSearchModal(false)">
+        <div class="bg-brand-cream border border-brand-sand rounded-2xl w-full max-w-xl p-6 shadow-2xl relative" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-3 border-b border-brand-sand pb-4">
+                <i class="fa-solid fa-magnifying-glass text-brand-forest text-lg"></i>
+                <input type="text" id="catalog-search-input" oninput="handleSearch(this.value)" placeholder="Search herbs (e.g. Ashwagandha, Triphala...)" class="flex-1 bg-transparent border-none text-brand-forest font-medium placeholder-brand-charcoal/50 focus:outline-none" />
+                <button onclick="toggleSearchModal(false)" class="text-brand-charcoal/60 hover:text-brand-forest"><i class="fa-solid fa-circle-xmark text-lg"></i></button>
+            </div>
+            <!-- Search Results Container -->
+            <div id="search-results-container" class="mt-4 max-h-60 overflow-y-auto divide-y divide-brand-sand">
+                <p class="text-xs text-brand-charcoal/60 py-2">Start typing to see organic formulations...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Quick View Modal Popover -->
+    <div id="product-modal" class="fixed inset-0 bg-brand-charcoal/40 backdrop-blur-sm z-50 hidden flex items-center justify-center px-4" onclick="toggleProductModal(false)">
+        <div class="bg-brand-cream border border-brand-sand rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative" onclick="event.stopPropagation()">
+            <button onclick="toggleProductModal(false)" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/85 shadow-md hover:bg-brand-sage flex items-center justify-center text-brand-forest">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="w-full md:w-1/2 bg-[#F3EFE9] p-8 flex items-center justify-center border-r border-brand-sand">
+                <img id="modal-product-img" src="" alt="Product Image" class="max-h-64 object-contain drop-shadow-lg" />
+            </div>
+            
+            <div class="w-full md:w-1/2 p-8 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span id="modal-product-tag" class="text-[9px] font-bold uppercase tracking-widest bg-brand-sage text-brand-forest px-2.5 py-1 rounded-full"></span>
+                        <span id="modal-product-weight" class="text-[10px] font-semibold text-brand-charcoal/60"></span>
+                    </div>
+                    <h3 id="modal-product-title" class="font-serif text-2xl font-black text-brand-forest"></h3>
+                    <div class="flex items-center gap-1.5 text-brand-star-color text-xs text-yellow-500">
+                        <i class="fa-solid fa-star"></i>
+                        <span id="modal-product-rating" class="text-brand-charcoal font-bold text-xs"></span>
+                    </div>
+                    <p id="modal-product-desc" class="text-brand-charcoal/80 text-xs sm:text-sm leading-relaxed"></p>
+                    <div id="modal-product-price" class="text-xl font-bold font-serif text-brand-forest"></div>
+                </div>
+
+                <div class="pt-6">
+                    <button id="modal-add-button" class="w-full bg-brand-forest hover:bg-brand-forestLight text-brand-cream text-xs font-bold uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Basket
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT STATE CONTROLLER -->
+    <script>
+        // High Quality Ayurvedic Herbal Products Array matching the exact packaging layout on Untitled.jpeg
+        const products = [
+            {
+                id: 1,
+                title: "Ashwagandha Powder",
+                category: "mind",
+                tag: "Stress & Strength Support",
+                price: 549.00,
+                weight: "200g",
+                rating: 4.9,
+                bestSeller: true,
+                description: "Authentic Ashwagandha root powder designed to build everyday stamina, relieve cortisol stress levels, and restore balanced energy reserves.",
+                img: "https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=400"
+            },
+            {
+                id: 2,
+                title: "Moringa Powder",
+                category: "immunity",
+                tag: "Plant-Based Nutrition",
+                price: 449.00,
+                weight: "200g",
+                rating: 4.8,
+                bestSeller: true,
+                description: "Superfood Moringa leaf powder. Loaded with biological micronutrients, minerals, and clean herbal proteins that fortify organic immune health.",
+                img: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400"
+            },
+            {
+                id: 3,
+                title: "Triphala Powder",
+                category: "digestive",
+                tag: "Daily Digestive Care",
+                price: 449.00,
+                weight: "200g",
+                rating: 4.7,
+                bestSeller: true,
+                description: "Balanced traditional formulation of Amalaki, Bibhitaki, and Haritaki. Supports absolute metabolic detoxification, gentle daily relief, and gut microbiome balance.",
+                img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400"
+            },
+            {
+                id: 4,
+                title: "Wheatgrass Powder",
+                category: "immunity",
+                tag: "Alkalizing Green Food",
+                price: 499.00,
+                weight: "200g",
+                rating: 4.6,
+                bestSeller: false,
+                description: "Young nutrient-rich green grass powder. Promotes heavy metal detoxification, helps maintain body alkalinity, and supports optimal skin brightness.",
+                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400"
+            },
+            {
+                id: 5,
+                title: "Shatavari Powder",
+                category: "mind",
+                tag: "Nourishing Wellness Adaptogen",
+                price: 549.00,
+                weight: "200g",
+                rating: 4.8,
+                bestSeller: false,
+                description: "Traditional adaptogen powder crafted for complete support of female hormonal health, stress relief, and biological cellular vitality.",
+                img: "https://images.unsplash.com/photo-1632292224971-0d45778b3002?w=400"
+            }
+        ];
+
+        // Global Cart State
+        let cart = [];
+
+        // App Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCatalog(products);
+            updateCartBadge();
+        });
+
+        // 1. Dynamic Catalog Rendering
+        function renderCatalog(items) {
+            const container = document.getElementById('product-grid-container');
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-brand-charcoal/60">
+                        <p class="text-sm">No formulations found matching this group.</p>
+                    </div>
+                `;
                 return;
             }
 
-            container.innerHTML = shoppingCart.map((item, index) => `
-                <div class="cart-item">
-                    <div>
-                        <h4 style="font-size: 0.9rem; margin-bottom: 2px;">${item.title}</h4>
-                        <span style="color: var(--primary); font-weight: 700; font-size: 0.85rem;">Rs. ${item.price.toFixed(2)}</span>
+            container.innerHTML = items.map(p => `
+                <div class="product-card group relative bg-white border border-brand-sand rounded-3xl p-5 hover:shadow-xl transition-all cursor-pointer" onclick="openProductModal(${p.id})">
+                    ${p.bestSeller ? '<div class="absolute top-4 left-4 bg-brand-accent text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full z-10 shadow-sm">Bestseller</div>' : ''}
+                    
+                    <!-- Packaging Image Container -->
+                    <div class="w-full aspect-square bg-brand-sageLight rounded-2xl overflow-hidden flex items-center justify-center p-6 relative">
+                        <img src="${p.img}" alt="${p.title}" class="w-4/5 h-4/5 object-contain transition-transform duration-300 group-hover:scale-105" />
+                        <div class="absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm text-[9px] font-bold text-brand-forest uppercase tracking-wider px-2 py-1 rounded-md border border-brand-sand">
+                            ${p.weight}
+                        </div>
                     </div>
-                    <button onclick="removeItem(${index})" style="background:none; border:none; color: #cc0000; cursor:pointer;"><i class="fa-regular fa-trash-can"></i></button>
+
+                    <!-- Details Area -->
+                    <div class="mt-4 space-y-2">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-brand-accent block">${p.tag}</span>
+                        <h4 class="font-serif text-lg font-bold text-brand-forest group-hover:text-brand-accent transition-colors truncate">${p.title}</h4>
+                        
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="font-serif font-bold text-base text-brand-forest">₹${p.price.toFixed(2)}</span>
+                            <div class="flex items-center gap-1 text-[11px] text-brand-charcoal/70">
+                                <i class="fa-solid fa-star text-yellow-500 text-[10px]"></i>
+                                <span class="font-bold text-brand-forest">${p.rating}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Button -->
+                    <button onclick="event.stopPropagation(); addToCart(${p.id})" class="mt-4 w-full bg-brand-forest hover:bg-brand-forestLight text-brand-cream text-[11px] font-bold uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Basket
+                    </button>
                 </div>
             `).join('');
         }
 
-        function removeItem(idx) {
-            shoppingCart.splice(idx, 1);
-            updateCartUI();
-        }
-
-        async function processCheckout() {
-            if (shoppingCart.length === 0) return alert("Your cart is empty!");
+        // Hero Product Selector Image Changer
+        function updateHeroShowcase(id) {
+            const img = document.getElementById('hero-showcase-img');
+            const buttons = document.querySelectorAll('.hero-selector-btn');
             
-            const res = await fetch('http://localhost:8000/api/checkout-session', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items: shoppingCart })
+            buttons.forEach(btn => {
+                btn.className = "hero-selector-btn flex-1 flex flex-col items-center p-2 rounded-xl transition-all hover:bg-brand-sageLight text-brand-charcoal";
             });
-            const data = await res.json();
-            if (data.success) {
-                alert(`Order Processed Successfully!\nTracking Code: ${data.trackingId}\nCheck your Ubuntu terminal window logs to view full tracking properties.`);
-                shoppingCart = [];
-                updateCartUI();
-                toggleCart(false);
+
+            // Map IDs to specific herbal assets
+            if (id === 1) {
+                img.src = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500"; // Triphala
+                buttons[0].className = "hero-selector-btn active flex-1 flex flex-col items-center p-2 rounded-xl transition-all bg-brand-sage text-brand-forest";
+            } else if (id === 2) {
+                img.src = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=500"; // Moringa
+                buttons[1].className = "hero-selector-btn active flex-1 flex flex-col items-center p-2 rounded-xl transition-all bg-brand-sage text-brand-forest";
+            } else if (id === 3) {
+                img.src = "https://images.unsplash.com/photo-1611070973770-b1a6726b0c6e?w=500"; // Ashwagandha
+                buttons[2].className = "hero-selector-btn active flex-1 flex flex-col items-center p-2 rounded-xl transition-all bg-brand-sage text-brand-forest";
             }
         }
 
-        fetchProducts();
+        // Catalog Filter Method
+        function filterCatalog(category) {
+            const buttons = document.querySelectorAll('.catalog-filter-btn');
+            buttons.forEach(btn => {
+                btn.className = "catalog-filter-btn bg-brand-cream text-brand-charcoal hover:bg-brand-sageLight text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all border border-brand-sand";
+            });
+
+            // Set Active State
+            event.target.className = "catalog-filter-btn active bg-brand-forest text-brand-cream text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-all";
+
+            if (category === 'all') {
+                renderCatalog(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderCatalog(filtered);
+            }
+        }
+
+        // Toggle Drawer Elements
+        function toggleCartDrawer(isOpen) {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            if (isOpen) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Toggle Search Popover
+        function toggleSearchModal(isOpen) {
+            const modal = document.getElementById('search-modal');
+            if (isOpen) {
+                modal.classList.remove('hidden');
+                document.getElementById('catalog-search-input').focus();
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Toggle Product Showcase Modal
+        function toggleProductModal(isOpen) {
+            const modal = document.getElementById('product-modal');
+            if (isOpen) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Open specific Product Modal Details
+        function openProductModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modal-product-img').src = product.img;
+            document.getElementById('modal-product-tag').innerText = product.tag;
+            document.getElementById('modal-product-weight').innerText = `Pack Size: ${product.weight}`;
+            document.getElementById('modal-product-title').innerText = product.title;
+            document.getElementById('modal-product-rating').innerText = `${product.rating} / 5.0 Rating`;
+            document.getElementById('modal-product-desc').innerText = product.description;
+            document.getElementById('modal-product-price').innerText = `₹${product.price.toFixed(2)}`;
+
+            // Dynamic add button binding inside modal context
+            const addButton = document.getElementById('modal-add-button');
+            addButton.onclick = () => {
+                addToCart(product.id);
+                toggleProductModal(false);
+            };
+
+            toggleProductModal(true);
+        }
+
+        // Search Filter Engine
+        function handleSearch(query) {
+            const resultsContainer = document.getElementById('search-results-container');
+            const queryClean = query.toLowerCase().trim();
+
+            if (!queryClean) {
+                resultsContainer.innerHTML = '<p class="text-xs text-brand-charcoal/60 py-2">Start typing to see organic formulations...</p>';
+                return;
+            }
+
+            const results = products.filter(p => p.title.toLowerCase().includes(queryClean) || p.description.toLowerCase().includes(queryClean));
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<p class="text-xs text-brand-charcoal/60 py-2">No matching herbs found.</p>';
+                return;
+            }
+
+            resultsContainer.innerHTML = results.map(p => `
+                <div onclick="openProductModal(${p.id}); toggleSearchModal(false)" class="flex items-center gap-3 py-3 hover:bg-brand-sage/20 cursor-pointer transition-all px-2 rounded-lg">
+                    <img src="${p.img}" alt="${p.title}" class="w-10 h-10 object-contain bg-brand-sageLight rounded-lg p-1" />
+                    <div>
+                        <h5 class="text-xs font-bold text-brand-forest">${p.title}</h5>
+                        <p class="text-[10px] text-brand-accent">${p.tag} • ₹${p.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Interactive Accordion Controller
+        function toggleFaq(index) {
+            const body = document.getElementById(`faq-body-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            // Check if current is expanded
+            if (body.style.maxHeight && body.style.maxHeight !== '0px') {
+                body.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all others first
+                for (let i = 0; i < 3; i++) {
+                    const otherBody = document.getElementById(`faq-body-${i}`);
+                    const otherIcon = document.getElementById(`faq-icon-${i}`);
+                    if (otherBody) otherBody.style.maxHeight = '0px';
+                    if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                }
+                // Open selected
+                body.style.maxHeight = body.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Toast success alert manager
+        function showNotification(message, isSuccess = true) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-xl flex items-center gap-3 text-xs font-bold uppercase tracking-wider border pointer-events-auto transition-all duration-300 transform translate-y-2 opacity-0 ${
+                isSuccess 
+                    ? 'bg-brand-sage text-brand-forest border-brand-sage' 
+                    : 'bg-red-50 text-red-800 border-red-200'
+            }`;
+            
+            toast.innerHTML = `
+                <i class="${isSuccess ? 'fa-solid fa-circle-check text-base' : 'fa-solid fa-triangle-exclamation text-base'}"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger Animation Frame
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            // Remove automatically
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Add to Cart Controller
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // Check if product exists inside current cart list state
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+
+            updateCartBadge();
+            renderCartItems();
+            toggleCartDrawer(true);
+            showNotification(`Added ${product.title} to your wellness basket!`);
+        }
+
+        // Global Badge scale controller
+        function updateCartBadge() {
+            const badge = document.getElementById('global-cart-badge');
+            const totalItems = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+            
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('scale-0');
+                badge.classList.add('scale-100');
+            } else {
+                badge.classList.remove('scale-100');
+                badge.classList.add('scale-0');
+            }
+        }
+
+        // Modify Quantity inside Drawer State
+        function updateQuantity(productId, delta) {
+            const item = cart.find(p => p.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(p => p.id !== productId);
+            }
+
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        // Draw active Cart elements
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const totalValueSpan = document.getElementById('cart-total-value');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-brand-charcoal/65">
+                        <i class="fa-solid fa-box-open text-4xl mb-4 text-brand-sand"></i>
+                        <p class="text-sm">Your active wellness basket is currently empty.</p>
+                        <a href="#powders" onclick="toggleCartDrawer(false)" class="inline-block mt-4 text-xs font-bold uppercase tracking-wider text-brand-accent border-b border-brand-accent pb-0.5">Explore Powders</a>
+                    </div>
+                `;
+                totalValueSpan.innerText = '₹0.00';
+                return;
+            }
+
+            let subtotal = 0;
+            container.innerHTML = cart.map(item => {
+                const totalItemPrice = item.price * item.quantity;
+                subtotal += totalItemPrice;
+                return `
+                    <div class="flex items-center gap-4 border-b border-brand-sand pb-4">
+                        <img src="${item.img}" alt="${item.title}" class="w-14 h-14 object-contain bg-brand-sageLight rounded-xl p-2 border border-brand-sand" />
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-serif font-bold text-sm text-brand-forest truncate">${item.title}</h4>
+                            <span class="text-[10px] text-brand-accent block uppercase tracking-wider">${item.tag}</span>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-xs text-brand-forest">₹${totalItemPrice.toFixed(2)}</span>
+                                <div class="flex items-center gap-2 border border-brand-sand rounded-lg bg-white p-1">
+                                    <button onclick="updateQuantity(${item.id}, -1)" class="w-5 h-5 text-xs text-brand-forest hover:bg-brand-sageLight rounded flex items-center justify-center"><i class="fa-solid fa-minus"></i></button>
+                                    <span class="text-xs font-bold px-1 text-brand-forest">${item.quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, 1)" class="w-5 h-5 text-xs text-brand-forest hover:bg-brand-sageLight rounded flex items-center justify-center"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalValueSpan.innerText = `₹${subtotal.toFixed(2)}`;
+        }
+
+        // Local dynamic checkout trigger API simulator (Gracefully falls back if server offline)
+        async function triggerCheckoutLocal() {
+            if (cart.length === 0) {
+                showNotification("Add formulations to basket first!", false);
+                return;
+            }
+
+            const checkoutBody = {
+                items: cart.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    price: item.price,
+                    quantity: item.quantity
+                }))
+            };
+
+            try {
+                // Post checkout to running local node server pipeline
+                const response = await fetch('http://localhost:8000/api/checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(checkoutBody)
+                });
+                const confirmation = await response.json();
+                
+                if (confirmation.success) {
+                    showNotification(`Order dispatched successfully! ID: ${confirmation.trackingId}`);
+                    cart = [];
+                    updateCartBadge();
+                    renderCartItems();
+                    toggleCartDrawer(false);
+                }
+            } catch (error) {
+                // Standalone Sandbox Fallback Mode
+                const fallbackId = `AKH-LOCAL-${Math.floor(Math.random() * 90000) + 10000}`;
+                showNotification(`Offline Order Logged! Tracking code: ${fallbackId}`);
+                cart = [];
+                updateCartBadge();
+                renderCartItems();
+                toggleCartDrawer(false);
+            }
+        }
+
+        // Newsletter submission handler
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            showNotification("Successfully subscribed to botanical updates!");
+            e.target.reset();
+        }
     </script>
 </body>
 </html>
